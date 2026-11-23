@@ -25,5 +25,5 @@ jobs:
         if: always()
         with:
           name: Bruno Test Results
-          path: automationexercise.com/results.xml
+          path: bruno/automationexercise.com/results.xml
           reporter: java-junit
