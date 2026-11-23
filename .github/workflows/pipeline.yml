@@ -18,3 +18,11 @@ jobs:
             -v ${{ github.workspace }}:/bruno \
             -w /bruno/automationexercise.com \
             usebruno/cli:3.4.2 run
+
+      - name: Publish test report
+        uses: dorny/test-reporter@v3
+        if: success() || failure()
+        with:
+          name: Bruno Test Results
+          path: results.xml
+          reporter: java-junit
