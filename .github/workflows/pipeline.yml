@@ -16,5 +16,5 @@ jobs:
         run: |
           docker run --rm \
             -v ${{ github.workspace }}:/bruno \
-            -w /automationexercise.com \
+            -w bruno/automationexercise.com \
             usebruno/cli:3.4.2 run
