@@ -1,0 +1,38 @@
+info:
+  name: Update User without Giving Every Field
+  type: http
+  seq: 4
+
+http:
+  method: PUT
+  url: https://automationexercise.com/api/updateAccount
+  body:
+    type: multipart-form
+    data:
+      - name: name
+        type: text
+        value: "{{new_name}}"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: before-request
+      code: bru.setVar("new_name", "new");
+    - type: tests
+      code: |-
+        test("Status code is 200", function () {
+          expect(res.getStatus()).to.equal(200);
+        });
+         
+        test("Account is not updated with responseCode 400", function () {
+          const data = res.getBody();
+          expect(data).to.be.an("object");
+          expect(data.responseCode).to.equal(400);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

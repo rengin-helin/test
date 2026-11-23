@@ -1,0 +1,59 @@
+info:
+  name: Search Product
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: https://automationexercise.com/api/searchProduct
+  body:
+    type: multipart-form
+    data:
+      - name: search_product
+        type: text
+        value: "{{keyword}}"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: before-request
+      code: bru.setVar("keyword","shirt");
+    - type: tests
+      code: |-
+        const data = res.getBody();
+
+        test("Status code is 200", function () {
+          expect(res.getStatus()).to.equal(200);
+        });
+         
+        test("Products lists returned with 200", function () {
+          expect(data).to.be.an("object");
+          expect(data.responseCode).to.equal(200);
+          expect(data).to.have.property("products");
+        });
+
+        test("Product fields are not empty", function () {
+          data.products.forEach((product) => {
+            expect(product.id).to.be.a("number");
+            expect(product.name).to.be.a("string").and.not.be.empty;
+            expect(product.price).to.be.a("string").and.to.include("Rs.");
+            expect(product.brand).to.be.a("string").and.not.be.empty;
+            expect(product.category).to.have.property("usertype");
+            expect(product.category).to.have.property("category");
+            expect(product.category.usertype).to.be.an("object").and.to.have.property("usertype");
+            expect(product.category.category).to.be.a("string").and.not.be.empty;
+            expect(product.category.usertype.usertype).to.be.a("string").and.not.be.empty;
+          });
+        });
+
+        test("Keyword exists in search results", function () {
+          const kw = bru.getVar("keyword").toLowerCase();
+          expect(data.products.some(p => JSON.stringify(p).toLowerCase().includes(kw))).to.be.true;
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

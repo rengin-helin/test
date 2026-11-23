@@ -1,0 +1,40 @@
+info:
+  name: Delete Account
+  type: http
+  seq: 8
+
+http:
+  method: DELETE
+  url: https://automationexercise.com/api/deleteAccount
+  body:
+    type: multipart-form
+    data:
+      - name: email
+        type: text
+        value: "{{email}}"
+      - name: password
+        type: text
+        value: "{{password}}"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Status code is 200", function () {
+          expect(res.getStatus()).to.equal(200);
+        });
+         
+        test("Account is deleted with responseCode 200", function () {
+          const data = res.getBody();
+          expect(data).to.be.an("object");
+          expect(data.responseCode).to.equal(200);
+          expect(data.message).to.equal("Account deleted!");
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

@@ -1,0 +1,39 @@
+info:
+  name: Browse Brands
+  type: http
+  seq: 4
+
+http:
+  method: GET
+  url: https://automationexercise.com/api/brandsList
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        const data = res.getBody();
+
+        test("Status code is 200", function () {
+          expect(res.getStatus()).to.equal(200);
+        });
+
+        test("Brands list returned with 200", function () {
+          expect(data).to.be.an("object");
+          expect(data.responseCode).to.equal(200);
+          expect(data).to.have.property("brands");
+        });
+
+        test("Brand fields are not empty", function () {
+          data.brands.forEach((brand) => {
+            expect(brand.id).to.be.a("number");
+            expect(brand.brand).to.be.a("string").and.not.be.empty;
+          });
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

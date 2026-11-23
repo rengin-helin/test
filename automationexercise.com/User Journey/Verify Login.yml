@@ -1,0 +1,40 @@
+info:
+  name: Verify Login
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: https://automationexercise.com/api/verifyLogin
+  body:
+    type: multipart-form
+    data:
+      - name: email
+        type: text
+        value: "{{email}}"
+      - name: password
+        type: text
+        value: "{{password}}"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Status code is 200", function () {
+          expect(res.getStatus()).to.equal(200);
+        });
+         
+        test("Account is verified with responseCode 200", function () {
+          const data = res.getBody();
+          expect(data).to.be.an("object");
+          expect(data.responseCode).to.equal(200);
+          expect(data.message).to.equal("User exists!");
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

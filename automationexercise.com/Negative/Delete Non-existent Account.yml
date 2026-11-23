@@ -1,0 +1,40 @@
+info:
+  name: Delete Non-existent Account
+  type: http
+  seq: 6
+
+http:
+  method: DELETE
+  url: https://automationexercise.com/api/deleteAccount
+  body:
+    type: multipart-form
+    data:
+      - name: email
+        type: text
+        value: dsoahjdjudjdjd@mail.com
+      - name: password
+        type: text
+        value: booooooo
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Status code is 200", function () {
+          expect(res.getStatus()).to.equal(200);
+        });
+         
+        test("Account not found with responseCode 404", function () {
+          const data = res.getBody();
+          expect(data).to.be.an("object");
+          expect(data.responseCode).to.equal(404);
+          expect(data.message).to.equal("Account not found!");
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

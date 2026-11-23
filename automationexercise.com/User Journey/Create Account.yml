@@ -1,0 +1,106 @@
+info:
+  name: Create Account
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: https://automationexercise.com/api/createAccount
+  body:
+    type: multipart-form
+    data:
+      - name: name
+        type: text
+        value: "{{name}}"
+      - name: password
+        type: text
+        value: "{{password}}"
+      - name: email
+        type: text
+        value: "{{email}}"
+      - name: firstname
+        type: text
+        value: "{{firstname}}"
+      - name: lastname
+        type: text
+        value: "{{lastname}}"
+      - name: country
+        type: text
+        value: "{{country}}"
+      - name: title
+        type: text
+        value: "{{title}}"
+      - name: birth_date
+        type: text
+        value: "{{birth_date}}"
+      - name: birth_month
+        type: text
+        value: "{{birth_month}}"
+      - name: birth_year
+        type: text
+        value: "{{birth_year}}"
+      - name: company
+        type: text
+        value: "{{company}}"
+      - name: address1
+        type: text
+        value: "{{address1}}"
+      - name: address2
+        type: text
+        value: "{{address2}}"
+      - name: zipcode
+        type: text
+        value: "{{zipcode}}"
+      - name: state
+        type: text
+        value: "{{state}}"
+      - name: city
+        type: text
+        value: "{{city}}"
+      - name: mobile_number
+        type: text
+        value: "{{mobile_number}}"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: before-request
+      code: |-
+        const email = `user_${Date.now()}@example.com`;
+        bru.setVar("email", email);
+
+        bru.setVar("name", "rengin");
+        bru.setVar("password", "123456");
+        bru.setVar("title", "ms");
+        bru.setVar("birth_date", "16");
+        bru.setVar("birth_month", "may");
+        bru.setVar("birth_year", "2001");
+        bru.setVar("firstname", "firstname");
+        bru.setVar("lastname", "lastname");
+        bru.setVar("company", "company");
+        bru.setVar("address1", "address1");
+        bru.setVar("address2", "address2");
+        bru.setVar("country", "country");
+        bru.setVar("zipcode", "16050");
+        bru.setVar("state", "state");
+        bru.setVar("city", "city");
+        bru.setVar("mobile_number", "77747238747");
+    - type: tests
+      code: |-
+        test("Status code is 200", function () {
+          expect(res.getStatus()).to.equal(200);
+        });
+         
+        test("Account is created with responseCode 201", function () {
+          const data = res.getBody();
+          expect(data).to.be.an("object");
+          expect(data.responseCode).to.equal(201);
+          expect(data.message).to.equal("User created!");
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

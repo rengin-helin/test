@@ -1,0 +1,87 @@
+info:
+  name: Update User Account
+  type: http
+  seq: 6
+
+http:
+  method: PUT
+  url: https://automationexercise.com/api/updateAccount
+  body:
+    type: multipart-form
+    data:
+      - name: name
+        type: text
+        value: "{{new_name}}"
+      - name: password
+        type: text
+        value: "{{password}}"
+      - name: email
+        type: text
+        value: "{{email}}"
+      - name: firstname
+        type: text
+        value: "{{firstname}}"
+      - name: lastname
+        type: text
+        value: "{{lastname}}"
+      - name: country
+        type: text
+        value: "{{country}}"
+      - name: title
+        type: text
+        value: "{{title}}"
+      - name: birth_date
+        type: text
+        value: "{{birth_date}}"
+      - name: birth_month
+        type: text
+        value: "{{birth_month}}"
+      - name: birth_year
+        type: text
+        value: "{{birth_year}}"
+      - name: company
+        type: text
+        value: "{{company}}"
+      - name: address1
+        type: text
+        value: "{{address1}}"
+      - name: address2
+        type: text
+        value: "{{address2}}"
+      - name: zipcode
+        type: text
+        value: "{{zipcode}}"
+      - name: state
+        type: text
+        value: "{{state}}"
+      - name: city
+        type: text
+        value: "{{city}}"
+      - name: mobile_number
+        type: text
+        value: "{{mobile_number}}"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: before-request
+      code: bru.setVar("new_name", "new");
+    - type: tests
+      code: |-
+        test("Status code is 200", function () {
+          expect(res.getStatus()).to.equal(200);
+        });
+         
+        test("Account is updated with responseCode 200", function () {
+          const data = res.getBody();
+          expect(data).to.be.an("object");
+          expect(data.responseCode).to.equal(200);
+          expect(data.message).to.equal("User updated!");
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

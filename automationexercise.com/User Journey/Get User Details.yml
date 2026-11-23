@@ -1,0 +1,55 @@
+info:
+  name: Get User Details
+  type: http
+  seq: 7
+
+http:
+  method: GET
+  url: https://automationexercise.com/api/getUserDetailByEmail?email={{email}}
+  params:
+    - name: email
+      value: "{{email}}"
+      type: query
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        const data = res.getBody();
+
+        test("Status code is 200", function () {
+          expect(res.getStatus()).to.equal(200);
+        });
+         
+        test("User returned with 200", function () {
+          expect(data).to.be.an("object");
+          expect(data.responseCode).to.equal(200);
+          expect(data).to.have.property("user");
+        });
+
+        test("User fields are not empty and they match to the user", function () {
+          expect(data.user.id).to.be.a("number");
+          expect(data.user.name).to.equal(bru.getVar("new_name"));
+          expect(data.user.email).to.equal(bru.getVar("email"));
+          expect(data.user.title).to.equal(bru.getVar("title"));
+          expect(data.user.birth_day).to.equal(bru.getVar("birth_date"));
+          expect(data.user.birth_month).to.equal(bru.getVar("birth_month"));
+          expect(data.user.birth_year).to.equal(bru.getVar("birth_year"));
+          expect(data.user.first_name).to.equal(bru.getVar("firstname"));
+          expect(data.user.last_name).to.equal(bru.getVar("lastname"));
+          expect(data.user.company).to.equal(bru.getVar("company"));
+          expect(data.user.address1).to.equal(bru.getVar("address1"));
+          expect(data.user.address2).to.equal(bru.getVar("address2"));
+          expect(data.user.country).to.equal(bru.getVar("country"));
+          expect(data.user.state).to.equal(bru.getVar("state"));
+          expect(data.user.city).to.equal(bru.getVar("city"));
+          expect(data.user.zipcode).to.equal(bru.getVar("zipcode"));
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
