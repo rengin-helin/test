@@ -17,12 +17,13 @@ jobs:
           docker run --rm \
             -v ${{ github.workspace }}:/bruno \
             -w /bruno/automationexercise.com \
-            usebruno/cli:3.4.2 run
+            usebruno/cli:3.4.2 run \
+            --reporter-junit results.xml
 
       - name: Publish test report
         uses: dorny/test-reporter@v3
         if: success() || failure()
         with:
           name: Bruno Test Results
-          path: results.xml
+          path: automationexercise.com/results.xml
           reporter: java-junit
