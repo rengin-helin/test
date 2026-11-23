@@ -12,18 +12,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Create report directory
+        run: mkdir -p test-results
+
       - name: Run Bruno tests
         run: |
           docker run --rm \
-            -v ${{ github.workspace }}:/bruno \
+            -v "${{ github.workspace }}:/bruno:ro" \
+            -v "${{ github.workspace }}/test-results:/reports" \
             -w /bruno/automationexercise.com \
             usebruno/cli:3.4.2 run \
-            --reporter-junit results.xml
+            --reporter-junit /reports/results.xml
 
       - name: Publish test report
         uses: dorny/test-reporter@v3
-        if: success() || failure()
+        if: always()
         with:
           name: Bruno Test Results
-          path: /bruno/automationexercise.com/results.xml
+          path: test-results/results.xml
           reporter: java-junit
