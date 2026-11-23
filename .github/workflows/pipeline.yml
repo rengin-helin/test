@@ -1,0 +1,19 @@
+name: Bruno API Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  api-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Bruno tests
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/bruno \
+            usebruno/cli:3.4.2 run
