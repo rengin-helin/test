@@ -15,6 +15,16 @@ jobs:
       - name: Run Bruno tests
         run: |
           docker run --rm \
-          -v "${{ github.workspace }}:/bruno" \
-          -w /bruno/automationexercise.com \
-          usebruno/cli:3.4.2 run
+            --user "$(id -u):$(id -g)" \
+            -v "${{ github.workspace }}:/bruno" \
+            -w /bruno/automationexercise.com \
+            usebruno/cli:3.4.2 run \
+            --reporter-junit /bruno/results.xml
+
+      - name: Publish test report
+        if: always()
+        uses: dorny/test-reporter@v3
+        with:
+          name: Bruno Test Results
+          path: results.xml
+          reporter: java-junit
