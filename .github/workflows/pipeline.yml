@@ -25,5 +25,5 @@ jobs:
         uses: dorny/test-reporter@v3
         with:
           name: Bruno Test Results
-          path: results.xml
+          path: /bruno/results.xml
           reporter: java-junit
