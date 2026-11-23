@@ -25,5 +25,5 @@ jobs:
         if: success() || failure()
         with:
           name: Bruno Test Results
-          path: results.xml
+          path: /bruno/automationexercise.com/results.xml
           reporter: java-junit
