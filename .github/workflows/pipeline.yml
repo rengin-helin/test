@@ -15,7 +15,6 @@ jobs:
       - name: Run Bruno tests
         run: |
           docker run --rm \
-            --user "$(id -u):$(id -g)" \
             -v "${{ github.workspace }}:/bruno" \
             -w /bruno/automationexercise.com \
             usebruno/cli:3.4.2 run \
